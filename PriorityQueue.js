@@ -4,7 +4,7 @@
 
 
 // CONSTRUCTOR
-function PriorityQueue(capacity) {
+export function PriorityQueue(capacity) {
     this.__pq = new Array(capacity); 
     this.__N = 0; 
 }

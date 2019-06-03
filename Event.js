@@ -4,7 +4,7 @@
 
 
 // CONSTRUCTOR
-function Event(t, particleA, particleB) {
+export function Event(t, particleA, particleB) {
     this.t = t;
     this.particleA = particleA;
     this.particleB = particleB;

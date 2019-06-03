@@ -4,7 +4,7 @@
 
 
 // CONSTRUCTOR
-function Particle(id,x,y,vx,vy,radius,mass) {
+export function Particle(id,x,y,vx,vy,radius,mass) {
     this.id = id;
 
     // Position & velocity
@@ -96,4 +96,6 @@ Particle.prototype.draw = function() {
 }
 
 
+
+// EXPORT
 

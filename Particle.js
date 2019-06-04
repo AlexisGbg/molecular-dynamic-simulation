@@ -39,16 +39,16 @@ Particle.prototype.timeToHit = function(particleB) {
     return -(dvdr + Math.sqrt(d)) / dvdv; 
 }
 
-Particle.prototype.timeToHitVerticalWall = function(wall) {
+Particle.prototype.timeToHitVerticalWall = function(width) {
     if (this.vx == 0) return Infinity;
-    if (this.vx > 0) return (wall.x2-this.x-this.radius) / this.vx;
-    else return (wall.x1 - this.x+this.radius) / this.vx; 
+    if (this.vx > 0) return (width-this.x-this.radius) / this.vx;
+    else return ( -this.x+this.radius) / this.vx; 
 }
 
-Particle.prototype.timeToHitHorizontalWall = function(wall) {
+Particle.prototype.timeToHitHorizontalWall = function(height) {
     if (this.vy == 0) return Infinity;
-    if (this.vy > 0) return (wall.y2-this.y-this.radius) / this.vy;
-    else return (wall.y1 - this.y+this.radius) / this.vy; 
+    if (this.vy > 0) return (height-this.y-this.radius) / this.vy;
+    else return (-this.y+this.radius) / this.vy; 
 }
 
 Particle.prototype.bounceOff = function(particleB) {
@@ -93,9 +93,4 @@ Particle.prototype.draw = function() {
     d3.select("#"+this.id)
 	.attr("cx",this.x)
 	.attr("cy",this.y);
-}
-
-
-
-// EXPORT
-
+};

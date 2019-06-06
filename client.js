@@ -1,6 +1,5 @@
-import { CollisionSystem } from './CollisionSystem.js'; 
 
-const collisionSystem = new CollisionSystem("system", 50); 
+const collisionSystem = new window.CollisionSystem("system", 50); 
 
 // MAIN LOOP
 window.setInterval(

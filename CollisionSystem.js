@@ -15,7 +15,7 @@ import { Event } from './Event.js';
 import { Particle } from './Particle.js'; 
 
 // CONSTUCTOR
-export function CollisionSystem(container_id, n_particles) {
+function CollisionSystem(container_id, n_particles) {
     this.__id = container_id;
     this.__n = n_particles; 
     this.__width = document.getElementById(container_id)
@@ -125,3 +125,4 @@ CollisionSystem.prototype.__redraw = function() {
     }
 };
 
+window.CollisionSystem = CollisionSystem; 

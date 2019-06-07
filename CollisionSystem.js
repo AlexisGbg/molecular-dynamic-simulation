@@ -95,6 +95,7 @@ CollisionSystem.prototype.__generateParticles = function() {
 	for (var l=0; l<N; l++) {
 	    particles[k*N+l] = new Particle(
 		"particle"+(k*N+l),
+		"particle", 
 		k*this.__width/N + this.__width/(2*N),
 		l*this.__height/N + this.__height/(2*N),
 		Math.random()*0.2 - 0.1, // steps must be small
@@ -111,10 +112,11 @@ CollisionSystem.prototype.__draw = function() {
         .data(this.__particles)
 	.enter()
 	.append("circle")
-	.attr("id", function(d) {return d.id;})
-	.attr("cx", function(d) {return d.x;})
-	.attr("cy", function(d) {return d.y;})
-	.attr("r",  function(d) {return d.radius;});
+	.attr("class", function(d) {return d.class})
+	.attr("id",    function(d) {return d.id;})
+	.attr("cx",    function(d) {return d.x;})
+	.attr("cy",    function(d) {return d.y;})
+	.attr("r",     function(d) {return d.radius;});
 };
 
 

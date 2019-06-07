@@ -4,9 +4,10 @@
 
 
 // CONSTRUCTOR
-export function Particle(id,x,y,vx,vy,radius,mass) {
+export function Particle(id,type,x,y,vx,vy,radius,mass) {
     this.id = id;
-
+    this.type = type; // for css purposes
+    
     // Position & velocity
     this.x = x;
     this.y = y;

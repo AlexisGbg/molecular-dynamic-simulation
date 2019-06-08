@@ -109,7 +109,7 @@ Particle.prototype.draw = function(container_id) {
 	this.sys.removeParticle(d3.event.target.id);
     };
 	    
-    const border_size = 0.3; 
+    const border_size = 0.1; 
     d3.select("#"+container_id)
 	.append("circle")
 	.attr("id",           this.id)

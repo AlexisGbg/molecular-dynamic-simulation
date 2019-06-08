@@ -1,12 +1,14 @@
 /*
  * COLLISION SYSTEM PROTOTYPE
  *
- * This module contains the client API. This API is made up 
- * of a single method, simulate, which must be called 
- * to increment the simulation's time by one. 
+ * Contains the following API:
+ * - simulate: increments the time by one unit.  
+ * - addParticle: add one particle to the system (if possible)
+ * - removeParticle: remove a particle
  *
+ * ====COMMENTS====
  * The variable prefix __ is used to simulate 
- * private attributes / methods
+ * the private keyword
  * 
  */
 
@@ -17,7 +19,6 @@ import { Particle } from './Particle.js';
 // CONSTUCTOR
 function CollisionSystem(container_id, n_particles) {
     this.__id = container_id;
-    this.__n = n_particles; 
     this.__width = document.getElementById(container_id)
 	.viewBox
 	.baseVal
@@ -25,27 +26,28 @@ function CollisionSystem(container_id, n_particles) {
     this.__height = document.getElementById(container_id)
 	.viewBox
 	.baseVal
-	.height; 
-    this.__particles = this.__generateParticles();
-    this.__pq = new PriorityQueue(2*Math.pow(this.__particles.length,2));
+	.height;
+    this.__particle_radius = Math.min(this.__height, this.__width) * 0.05; 
+    
+    this.__particles = Array();
+    this.__pq = new PriorityQueue(2*Math.pow(n_particles,2));
     this.__t = 0; 
 
-    for (var i=0; i<this.__particles.length; i++) {
-	this.__predict(this.__particles[i]); 
-    }
-    this.__draw();
-    console.log(this.__pq); 
-}
+    this.__generateParticles(n_particles);
+    this.__setHandling(); 
+};
 
 
 // API 
 CollisionSystem.prototype.simulate = function() {
     this.__t++; 
 
+    // Remove invalid events
     while (!this.__pq.min().isValid()) {
 	this.__pq.delMin();
     }
 
+    // Execute mature events
     while ( this.__pq.min().t < this.__t &&
 	    this.__pq.min().isValid() ) {
 	var nextEvent = this.__pq.delMin();
@@ -60,12 +62,57 @@ CollisionSystem.prototype.simulate = function() {
     this.__redraw();
 };
 
+CollisionSystem.prototype.addParticle = function(css_class, x, y, size) {
+    if (!(size >= 1 || size <= 100)) return;  
+    const radius = this.__particle_radius * size; 
+    const mass = radius; 
+    
+    // Don't add the particle if it overlaps another element
+    for (let particle of this.__particles) {
+	let dx = particle.x - x;
+	let dy = particle.y - y;
+	let d = Math.sqrt(dx*dx+dy*dy);
+	if (d < particle.radius + radius) {
+	    return; 
+	}
+    }
+
+    // Instanciate the new particle
+    let particle = new Particle(
+	this, x, y,
+	(Math.random()*radius - radius/2)*0.1,
+	(Math.random()*radius - radius/2)*0.1,
+	radius,
+	mass,
+	css_class);
+    
+    
+    // Draw it
+    particle.draw(this.__id);
+  
+};
+
+CollisionSystem.prototype.removeParticle = function(id) {
+    const particle = this.__particles.filter(p => {return p.id == id;})[0];
+    particle.remove(); 
+};
+
 // HELPER METHODS
+CollisionSystem.prototype.__registerParticle = function(particle) {
+    this.__particles.push(particle);
+    this.__predict(particle); 
+};
+
+CollisionSystem.prototype.__removeParticle = function(particle) {
+    this.__particles = this.__particles.filter(p => {return p.id != particle.id;}); 
+    particle.count++; // Invalidates all future events involving this particle
+};
+
 CollisionSystem.prototype.__predict = function(particle) {
     if (particle == null) return;
-    var dt; 
-    var event; 
-    for (var i=0; i<this.__particles.length; i++) {
+    let dt; 
+    let event; 
+    for (let i=0; i<this.__particles.length; i++) {
 	dt = particle.timeToHit(this.__particles[i]); 
 	if(dt != Infinity){
 	    event = new Event(this.__t + dt, particle, this.__particles[i]);
@@ -84,47 +131,69 @@ CollisionSystem.prototype.__predict = function(particle) {
     }
 };
  
-CollisionSystem.prototype.__generateParticles = function() {
-    // this function distributes the particles evenly in the
-    // available space.
-    const N = Math.floor(Math.sqrt(this.__n)); 
-    const particles = new Array(Math.pow(N,2));
-    const radius = Math.min(this.__width/(4*N), this.__height/(4*N));
-    const mass = radius;
-    for (var k=0; k<N; k++) {
-	for (var l=0; l<N; l++) {
-	    particles[k*N+l] = new Particle(
-		"particle"+(k*N+l),
-		"particle", 
-		k*this.__width/N + this.__width/(2*N),
-		l*this.__height/N + this.__height/(2*N),
-		Math.random()*0.2 - 0.1, // steps must be small
-		Math.random()*0.2 - 0.1,
-		radius,
-		mass);
+CollisionSystem.prototype.__generateParticles = function(n) {
+    // This function initialize a system of particles
+    const N = Math.floor(Math.sqrt(n)); 
+    const grid_x = this.__width/N;
+    const grid_y = this.__height/N; 
+
+    // Add a molecule in the middle of the system
+    this.addParticle(
+	"molecule",
+	this.__width/2,
+	this.__height/2,
+	3); 
+
+    // Add small atoms all around
+    for (let k=0; k<N; k++) {
+	for (let l=0; l<N; l++) {
+	    this.addParticle(
+		"atom",
+		k*grid_x + grid_x/2,
+		l*grid_y + grid_y/2,
+		1);
 	}
     }
-    return particles; 
 };
 
 CollisionSystem.prototype.__draw = function() {
-    d3.select("#"+this.__id).selectAll("circle")
-        .data(this.__particles)
-	.enter()
-	.append("circle")
-	.attr("class", function(d) {return d.class})
-	.attr("id",    function(d) {return d.id;})
-	.attr("cx",    function(d) {return d.x;})
-	.attr("cy",    function(d) {return d.y;})
-	.attr("r",     function(d) {return d.radius;});
-};
-
-
-CollisionSystem.prototype.__redraw = function() {
-    for (var i=0; i<this.__particles.length; i++) {
-	this.__particles[i].move();
-	this.__particles[i].draw(); 
+    for (let particle of this.__particles) {
+	particle.draw(this.__id); 
     }
 };
 
+CollisionSystem.prototype.__redraw = function() {
+    for (let particle of this.__particles) {
+	particle.move();
+	particle.redraw(); 
+    }
+};
+
+// Interaction Handling
+CollisionSystem.prototype.__setHandling = function() {
+    const sys = document.getElementById(this.__id);
+    sys.addEventListener(
+	"mousedown",
+	() => {window.lastCollisionSystemPress = Date.now();});
+    sys.addEventListener(
+	"mouseup",
+	() => {window.lastCollisionSystemUnpress = Date.now();});
+    sys.addEventListener(
+	"click",
+	(e) => {
+	    let pt = sys.createSVGPoint();
+	    pt.x = e.clientX;
+	    pt.y = e.clientY;
+	    pt = pt.matrixTransform(sys.getScreenCTM().inverse());  
+	    let pressTime = (window.lastCollisionSystemUnpress -
+	 		     window.lastCollisionSystemPress)/1000;
+	    let size; 
+	    if (pressTime < 0.3) size = 1; 
+	    else size = Math.min(3, pressTime/0.5); 
+ 	    this.addParticle("atom", pt.x, pt.y, size);
+	}); 
+  };
+
+
+// Expose the API through the window object
 window.CollisionSystem = CollisionSystem; 

@@ -10,13 +10,13 @@ export function Event(t, particleA, particleB) {
     this.particleB = particleB;
     this.countA = (particleA == null ? null : particleA.count);
     this.countB = (particleB == null ? null : particleB.count); 
-}
+};
 
 // METHODS
 // valueOf is used when events are compared
 Event.prototype.valueOf = function() {
     return this.t; 
-}
+};
 
 Event.prototype.isValid = function() {
     var newCountA = (this.particleA == null ? null : this.particleA.count);
@@ -28,4 +28,4 @@ Event.prototype.isValid = function() {
     } else {
 	return false;
     }
-}
+};

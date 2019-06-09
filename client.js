@@ -20,13 +20,15 @@ Promise.all([
     	      window.collisionSystemTimer = setInterval(() => collisionSystem.simulate(),1);
 	      window.collisionSystemOn = true; 
 	      window.dispatchEvent(new Event("wheel")); // Force to check the initial position of the system.
+	      window.dispatchEvent(new Event("touchmove")); 
 	  }
 	 ); 
 
 // Stops the simulation if the system is not on the screen
-window.addEventListener(
-    "wheel",
-    () => {
+window.addEventListener("wheel", checkCollisionSystem); 
+window.addEventListener("touchmove", checkCollisionSystem);
+
+function checkCollisionSystem() {
 	const containerPos = document.getElementById("system").getBoundingClientRect();
 	const top = containerPos.top;
 	const bottom = containerPos.bottom;
@@ -38,7 +40,7 @@ window.addEventListener(
     	    window.collisionSystemTimer = setInterval(() => collisionSystem.simulate(),1);
 	    window.collisionSystemOn = true; 
 	}
-    }); 
+    }; 
 
 
 

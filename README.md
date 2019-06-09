@@ -13,7 +13,7 @@ The package comes with build in interactions:
 - *click on particle*: will delete the particle
 - *click on system*: wil add a particle if possible (no overlapping with other particles).
 
-## In action
+## Collision System in action
 The system starts with a big particle, called molecule here, surrounded by small particles, called atoms. By keeping simulating the system, you can observe the random walk of the molecule. 
 
 ![Alt text](img/screenshot1.png?raw=true "Screenshot1")
@@ -25,3 +25,6 @@ Click on some atoms an create a low pressure atmosphere.
 If your interested in high pressure gas, add some atoms by clicking in the system. 
 
 ![Alt text](img/screenshot3.png?raw=true "Screenshot3")
+
+## Showcase
+The collision system is available here: [alexis-guibourge.blog](https://alexis-guibourge.blog)

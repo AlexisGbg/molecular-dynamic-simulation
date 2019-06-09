@@ -14,4 +14,4 @@ The package comes with build in interactions:
 - *click on system*: wil add a particle if possible (no overlapping with other particles).
 
 ## In action
-some pictures. 
+![Alt text](img/screenshot1.png?raw=true "Screenshot1")

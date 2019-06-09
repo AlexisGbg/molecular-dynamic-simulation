@@ -1,8 +1,14 @@
 /*
- * PARTICLE PROTOTYPE 
+ * PARTICLE
  * 
- * Particles "observe" the collisions system
- *
+ * Based on the observer pattern: 
+ * - CollisionSystem is an observable class. 
+     Its instance is here refered as sys  
+ * - Particle instances provide an API to enable the CollisionSystem 
+ *   to update their state. 
+ * - CollisionSystem provides an API to enable the Particle 
+ *   instances to register themself in the system (or remove themself).
+ *    
  */
 
 

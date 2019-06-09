@@ -1,5 +1,16 @@
 /* 
- * EVENT PROTOTYPE
+ * EVENT
+ *
+ * Each Event instance contains the time of collision for 
+ * a given particle pair. 
+ *
+ * If one of the particle has collided with another particle
+ * inbetween, the Event instance becomes invalid. 
+ *
+ * For simplification purposes, particleB = null refers to the 
+ * horizontal walls, particleA = null refers to the vertical
+ * walls 
+ * 
  */
 
 

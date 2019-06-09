@@ -1,5 +1,10 @@
 /*
- * PRIORITY QUEUE PROTOTYPE
+ * PRIORITY QUEUE
+ *
+ * This implementation uses a max heap, itself using an array as
+ * underlying data structure. 
+ * The array is of fixed capacity (TO IMPROVE)
+ *
  */
 
 

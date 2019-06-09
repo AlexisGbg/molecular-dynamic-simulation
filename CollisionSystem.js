@@ -1,7 +1,11 @@
 /*
- * COLLISION SYSTEM PROTOTYPE
+ * COLLISION SYSTEM
  *
- * Contains the following API:
+ * This script exposes the collision system constructor at 
+ * window.CollisionSystem. 
+ * The constructor takes two arguments: svg id and number of particles. 
+ *
+ * API:
  * - simulate: increments the time by one unit.  
  * - addParticle: add one particle to the system (if possible)
  * - removeParticle: remove a particle

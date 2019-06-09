@@ -28,6 +28,3 @@ If your interested in high pressure gas, add some atoms by clicking in the syste
 
 ## Showcase
 The collision system is available here: [alexis-guibourge.blog](https://alexis-guibourge.blog)
-
-## Acknowledgment
-Implementation has been inspired by Princeton University's online-course "Algorithm". 

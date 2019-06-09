@@ -10,8 +10,8 @@ This JS package enables the simulation of particles moving in a client-specified
 
 ## Interaction
 The package comes with build in interactions:
-- click on particle: will delete the particle
-- click on system: wil add a particle if possible (no overlapping with other particles).
+- *click on particle*: will delete the particle
+- *click on system*: wil add a particle if possible (no overlapping with other particles).
 
 ## In action
 some pictures. 
